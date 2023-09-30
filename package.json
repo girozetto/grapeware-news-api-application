@@ -4,7 +4,7 @@
   "description": "Api application for getting updated news from anywhere",
   "main": "aplicativo.js",
   "engines":{
-    "node":"14.x"
+    "node":"18.x"
   },
   "scripts": {
     "start": "node aplicativo.js"
