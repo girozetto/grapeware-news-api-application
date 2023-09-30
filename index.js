@@ -1,4 +1,5 @@
 //Dependências
+const { render } = require("ejs");
 const express = require("express");
 
 //Configurações
@@ -16,6 +17,9 @@ aplicativo.use(express.static("public"));
 //Definindo as rotas para cada entidade
 require('./operations/routes/newsRoutes')(aplicativo);
 require('./operations/routes/viewRoutes')(aplicativo);
+aplicativo.use("/",(req,res)=>{
+  res.status(200).send("<div> Olá, esta é uma api da Grapeware </div>");
+});
 
 
 //Inicializando o servidor

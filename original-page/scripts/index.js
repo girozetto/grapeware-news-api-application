@@ -7,7 +7,7 @@
   const imageLinkSection = document.getElementById("image-link-section");
   const formSubmit = document.getElementById("newsForm");
   const imageContent = { "url-link": "", "url-base64": "" };
-  const REQUEST_URL = "http://localhost:3000/api/create";
+  const REQUEST_URL = "/api/news/";
 
   //Ao mudar a imagem
   imageInput.addEventListener("change", function (event) {
@@ -80,8 +80,8 @@
             "category": categoryField.value,
             "image-cover": imageContent
         })
-      }).then((response) =>{
-        console.log(response)
+      }).then((response) =>response.json()).then((data)=>{
+        console.log(data);
       }).catch((error) =>{
         console.log(error)
       });
@@ -89,38 +89,6 @@
   });
 
   function validateFields() {
-    const titleField = document.getElementById("title");
-    const authorField = document.getElementById("author");
-    const publishDateField = document.getElementById("publish-date");
-    const contentPreviewField = document.getElementById("content-preview");
-    const contentField = document.getElementById("content");
-    const categoryField = document.getElementById("category");
-    const imageLinkField = document.getElementById("image-link");
-    const imageField = document.getElementById("image");
-
-    //Validating Title Field
-    if (titleField.value === "") return false;
-    if (titleField.value.length < 4) return false;
-
-    //Validating Author Field
-    if (authorField.value === "") return false;
-    if (authorField.value.length < 4) return false;
-
-    //Validating Publish Date Field
-    if (publishDateField.value === "") return false;
-    if (publishDateField.value.length < 4) return false;
-
-    //Validating Content Preview Field
-    if (contentPreviewField.value === "") return false;
-    if (contentPreviewField.value.length < 4) return false;
-
-    //Validating Content Field
-    if (contentField.value === "") return false;
-    if (contentField.value.length < 4) return false;
-
-    //Validating Category Field
-    if (categoryField.value === "") return false;
-    if (categoryField.value.length < 4) return false;
 
     console.log("Validating Image Field");
     //Validating ImageField
