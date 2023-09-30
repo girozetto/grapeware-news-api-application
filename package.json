@@ -2,12 +2,12 @@
   "name": "grapeware-news-api-application",
   "version": "0.0.3",
   "description": "Api application for getting updated news from anywhere",
-  "main": "aplicativo.js",
+  "main": "index.js",
   "engines":{
     "node":"18.x"
   },
   "scripts": {
-    "start": "node aplicativo.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
