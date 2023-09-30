@@ -1,0 +1,143 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, textarea, select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: auto;
+    max-width: 100%;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilizar a prévia do conteúdo da notícia */
+#content {
+    height: 100px;
+}
+
+/* Animação para o botão de adicionar notícia */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+button[type="submit"] {
+    animation: pulse 1.5s infinite alternate;
+}
+
+/* Adicionar estilos para a pré-visualização da imagem */
+#image-preview {
+    display: block;
+    margin-top: 10px;
+}
+
+/* Estilizar a aparência do botão de seleção de arquivo */
+
+#content-preview {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+/* Ajustes no estilo dos campos de entrada */
+input[type="text"],
+textarea {
+    background-color: #f9f9f9;
+}
+
+/* Ajustes no estilo do botão de adicionar notícia */
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Adicionar margem superior ao botão de seleção de arquivo */
+label[for="image"] {
+    margin-top: 10px;
+}
+
+/* Adicionar uma borda na imagem de pré-visualização */
+#image-preview {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+
+input[type="file"] {
+    display: none;
+}
+
+label[for="image"] {
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+label[for="image"]:hover {
+    background-color: #0056b3;
+}
+
+#image-link-section {
+    display: none;
+    margin-top: 10px;
+}

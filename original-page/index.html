@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adicionar Notícia - Grapeware API Notícias</title>
+  <link rel="stylesheet" href="styles/index.css">
+  <link rel="shortcut icon" href="resources/grape-news.png" type="image/x-icon">
+</head>
+
+<body>
+  <div class="container">
+    <form id="newsForm">
+      <label for="title">Título da Notícia:</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="author">Autor:</label>
+      <input type="text" id="author" name="author" required>
+
+      <label for="publish-date">Data de Publicação:</label>
+      <input type="date" id="publish-date" name="publish-date" required>
+
+      <label for="content-preview">Prévia da Notícia:</label>
+      <input type="text" id="content-preview" name="content-preview" required>
+
+      <label for="content">Conteúdo da Notícia:</label>
+      <textarea id="content" name="content" rows="5" required></textarea>
+
+      <label for="category">Categoria/Tópico:</label>
+      <select id="category" name="category" required>
+        <option value="política">Política</option>
+        <option value="tecnologia">Tecnologia</option>
+        <option value="esporte">Esporte</option>
+      </select>
+
+      <div>
+        <input type="checkbox" id="image-option" name="image-option">
+        <label for="image-option">Obter imagem por link</label>
+      </div>
+
+      <label id="image-chooser-label" for="image">Imagem Ilustrativa (selecione uma imagem):</label>
+
+      <div id="image-link-section">
+        <label for="image-link">Link da Imagem:</label>
+        <input type="url" id="image-link" name="image-link">
+      </div>
+
+      <input type="file" id="image" name="image" accept="image/*">
+      <img id="image-preview" src="#" alt="Imagem Ilustrativa" draggable="false" style="display: none; max-width: 100%;">
+
+      <button type="submit">Adicionar Notícia</button>
+    </form>
+  </div>
+  <script src="scripts/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+{
+  "name": "grapeware-news-api-application",
+  "version": "0.0.3",
+  "description": "Api application for getting updated news from anywhere",
+  "main": "aplicativo.js",
+  "engines":{
+    "node":"14.x"
+  },
+  "scripts": {
+    "start": "node aplicativo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/girozetto/grapeware-news-api-application.git"
+  },
+  "keywords": [
+    "api",
+    "news",
+    "updates",
+    "application",
+    "news"
+  ],
+  "author": "Giro Zetto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/girozetto/grapeware-news-api-application/issues"
+  },
+  "homepage": "https://github.com/girozetto/grapeware-news-api-application#readme",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2"
+  }
+}
