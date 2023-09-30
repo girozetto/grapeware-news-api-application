@@ -7,6 +7,155 @@
   <title>Adicionar Notícia - Grapeware API Notícias</title>
   <link rel="stylesheet" href="/styles/index.css">
   <link rel="shortcut icon" href="/resources/grape-news.png" type="image/x-icon">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      width: auto;
+      max-width: 100%;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Estilizar a prévia do conteúdo da notícia */
+    #content {
+      height: 100px;
+    }
+
+    /* Animação para o botão de adicionar notícia */
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    button[type="submit"] {
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    /* Adicionar estilos para a pré-visualização da imagem */
+    #image-preview {
+      display: block;
+      margin-top: 10px;
+    }
+
+    /* Estilizar a aparência do botão de seleção de arquivo */
+
+    #content-preview {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      background-color: #f9f9f9;
+    }
+
+    /* Ajustes no estilo dos campos de entrada */
+    input[type="text"],
+    textarea {
+      background-color: #f9f9f9;
+    }
+
+    /* Ajustes no estilo do botão de adicionar notícia */
+    button[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      font-weight: bold;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    /* Adicionar margem superior ao botão de seleção de arquivo */
+    label[for="image"] {
+      margin-top: 10px;
+    }
+
+    /* Adicionar uma borda na imagem de pré-visualização */
+    #image-preview {
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+
+
+    input[type="file"] {
+      display: none;
+    }
+
+    label[for="image"] {
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+    }
+
+    label[for="image"]:hover {
+      background-color: #0056b3;
+    }
+
+    #image-link-section {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -30,7 +179,7 @@
       <label for="category">Categoria/Tópico:</label>
       <select id="category" name="category" required>
         <%categories.forEach((category)=>{%>
-          <option value="<%=category.id%>"><%=category.name%></option>
+        <option value="<%=category.id%>"><%=category.name%></option>
         <%});%>
       </select>
 
@@ -52,7 +201,116 @@
       <button type="submit">Adicionar Notícia</button>
     </form>
   </div>
-  <script src="/scripts/index.js"></script>
+  <script>
+    (() => {
+      const imageInput = document.getElementById("image");
+      const imageLink = document.getElementById("image-link");
+      const imageChooser = document.getElementById("image-chooser-label");
+      const imagePreview = document.getElementById("image-preview");
+      const imageOptionCheckbox = document.getElementById("image-option");
+      const imageLinkSection = document.getElementById("image-link-section");
+      const formSubmit = document.getElementById("newsForm");
+      const imageContent = {
+        "url-link": "",
+        "url-base64": ""
+      };
+      const REQUEST_URL = "/api/news/";
+
+      //Ao mudar a imagem
+      imageInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            imageContent["url-base64"] = e.target.result;
+            imagePreview.src = e.target.result;
+            imagePreview.style.display = "block";
+            console.log("Recebido o Batman");
+          };
+          reader.readAsDataURL(file);
+        } else {
+          imageContent["url-base64"] = "";
+          imagePreview.src = "#";
+          imagePreview.style.display = "none";
+        }
+      });
+
+      //Ao introduzir uma url no campo de link
+      imageLink.addEventListener("input", (event) => {
+        if (this.value !== "") {
+          imageContent["url-link"] = imageLink.value;
+          imagePreview.src = imageLink.value;
+          imagePreview.style.display = "block";
+        } else {
+          imageContent["url-link"] = "";
+          imagePreview.src = "#";
+          imagePreview.style.display = "none";
+        }
+      });
+
+      //Ao mudar entre link e ficheiro local
+      imageOptionCheckbox.addEventListener("change", function() {
+        if (this.checked) {
+          imagePreview.src = "#";
+          imagePreview.style.display = "none";
+          imageLinkSection.style.display = "block";
+          imageChooser.style.display = "none";
+        } else {
+          imagePreview.src = "#";
+          imagePreview.style.display = "none";
+          imageLinkSection.style.display = "none";
+          imageChooser.style.display = "block";
+        }
+      });
+
+      //Ao submeter o form no servidor
+      formSubmit.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        if (validateFields()) {
+          const titleField = document.getElementById("title");
+          const authorField = document.getElementById("author");
+          const publishDateField = document.getElementById("publish-date");
+          const contentPreviewField = document.getElementById("content-preview");
+          const contentField = document.getElementById("content");
+          const categoryField = document.getElementById("category");
+
+          fetch(REQUEST_URL, {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify({
+              "title": titleField.value,
+              "author": authorField.value,
+              "publish-date": publishDateField.value,
+              "content-preview": contentPreviewField.value,
+              "content": contentField.value,
+              "category": categoryField.value,
+              "image-cover": imageContent
+            })
+          }).then((response) => response.json()).then((data) => {
+            console.log(data);
+          }).catch((error) => {
+            console.log(error)
+          });
+        }
+      });
+
+      function validateFields() {
+
+        console.log("Validating Image Field");
+        //Validating ImageField
+        if (imageOptionCheckbox.checked) {
+          if (imageContent["url-link"] === "") return false;
+        } else {
+          if (imageContent["url-base64"] === "") return false;
+        }
+
+        return true;
+      }
+    })();
+  </script>
 </body>
 
 </html>
