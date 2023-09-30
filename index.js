@@ -7,6 +7,7 @@ const aplicativo = express();
 const PORTA = process.env.PORT || 3000;
 
 //Definindo a engine  que será usada para renderização
+aplicativo.set("views", "./views");
 aplicativo.set("view engine", "ejs");
 
 //Definindo o tipo de middleware
