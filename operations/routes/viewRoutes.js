@@ -5,5 +5,5 @@ module.exports = (aplicativo) => {
 
   roteador.get("/creator", viewsController.viewCreator);
 
-  aplicativo.use("/views", roteador);
+  aplicativo.use("/screen", roteador);
 };
