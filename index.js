@@ -1,13 +1,14 @@
 //Dependências
 const { render } = require("ejs");
 const express = require("express");
+const path = require("path");
 
 //Configurações
 const aplicativo = express();
 const PORTA = process.env.PORT || 3000;
 
 //Definindo a engine  que será usada para renderização
-aplicativo.set("views", "./views");
+aplicativo.set("views", path.join(__dirname,"views"));
 aplicativo.set("view engine", "ejs");
 
 //Definindo o tipo de middleware
