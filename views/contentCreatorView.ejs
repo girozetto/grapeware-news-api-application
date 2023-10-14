@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adicionar Notícia - Grapeware API Notícias</title>
-  <link rel="stylesheet" href="/styles/index.css">
+  <!--Opcional - Resolver Bugs ---------------------------------
+    <link rel="stylesheet" href="/styles/index.css">-->
   <link rel="shortcut icon" href="/resources/grape-news.png" type="image/x-icon">
   <style>
     body {
@@ -71,18 +72,21 @@
     @keyframes pulse {
       0% {
         transform: scale(1);
+        background-color: #28a745;
       }
 
       50% {
         transform: scale(1.05);
+        background-color: #3083a3;
       }
 
       100% {
         transform: scale(1);
+        background-color: #28a745;
       }
     }
 
-    button[type="submit"] {
+    .pulsing {
       animation: pulse 1.5s infinite alternate;
     }
 
@@ -198,12 +202,13 @@
       <input type="file" id="image" name="image" accept="image/*">
       <img id="image-preview" src="#" alt="Imagem Ilustrativa" draggable="false" style="display: none; max-width: 100%;">
 
-      <button type="submit">Adicionar Notícia</button>
+      <button type="submit" id="submit-btn">Adicionar Notícia</button>
     </form>
   </div>
   <script>
     (() => {
       const imageInput = document.getElementById("image");
+      const submitBtn = document.getElementById("submit-btn");
       const imageLink = document.getElementById("image-link");
       const imageChooser = document.getElementById("image-chooser-label");
       const imagePreview = document.getElementById("image-preview");
@@ -234,6 +239,11 @@
           imagePreview.style.display = "none";
         }
       });
+
+      const toggleWaiting = (waiting = true) => {
+        submitBtn.className = waiting ? "pulsing":"";
+        submitBtn.disabled = waiting;
+      }
 
       //Ao introduzir uma url no campo de link
       imageLink.addEventListener("input", (event) => {
@@ -275,6 +285,7 @@
           const contentField = document.getElementById("content");
           const categoryField = document.getElementById("category");
 
+          toggleWaiting()
           fetch(REQUEST_URL, {
             headers: {
               "Content-Type": "application/json"
@@ -290,9 +301,14 @@
               "image-cover": imageContent
             })
           }).then((response) => response.json()).then((data) => {
+            submitBtn.style.backgroundColor = "#28a745";
+            location.reload();
             console.log(data);
           }).catch((error) => {
+            submitBtn.style.backgroundColor = "#e00e0e";
             console.log(error)
+          }).finally(() =>{
+            toggleWaiting(false);
           });
         }
       });

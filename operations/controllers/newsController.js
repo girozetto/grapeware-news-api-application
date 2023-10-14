@@ -5,7 +5,7 @@ const Category = require("../models/category");
 //All the models
 const newsModel = new News();
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   if (!req.body) {
     res.status(400).send({
       success: false,
@@ -20,7 +20,8 @@ exports.create = (req, res) => {
   news.content = req.body["content"];
   news.publishDate = req.body["publish-date"];
   news.contentPreview = req.body["content-preview"];
-  news.imageCover = req.body["image-cover"];
+  news.imageCoverUrl = req.body["image-cover"]["url-link"];
+  news.imageCoverBase64 = req.body["image-cover"]["url-base64"];
 
   if (!news.author) {
     res.status(400).send({
@@ -53,7 +54,7 @@ exports.create = (req, res) => {
     });
     return;
   } else {
-    const newsM = newsModel.getCategoryById(req.body["category"]);
+    const newsM = await Category.getById(req.body["category"]);
 
     if (!newsM) {
       res.status(404).send({
@@ -62,7 +63,7 @@ exports.create = (req, res) => {
       });
       return;
     } else {
-      news.category = new Category(newsM.id, newsM.name);
+      news.category = newsM;
     }
   }
 
@@ -82,7 +83,7 @@ exports.create = (req, res) => {
     return;
   }
 
-  if (!news.imageCover) {
+  if (!news.imageCoverBase64 && !news.imageCoverUrl) {
     res.status(400).send({
       success: false,
       message: "A imagem de capa não pode estar vazia",
@@ -90,10 +91,66 @@ exports.create = (req, res) => {
     return;
   }
 
-  console.log("Notícia Salva: ", news);
+  try {
+    await News.create(news);
+    res.status(200).json({
+      success: true,
+      message: "A notícia foi salva com sucesso!",
+    });
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      message: "Houve um erro no servidor!",
+    });
+  }
+};
 
-  res.status(200).json({
-    success: true,
-    message: "A notícia foi salva com sucesso!",
-  });
+exports.getLatestNews = async (req, res) => {
+  const limit = req.query.limit || 5;
+  const category = req.query.category || "Saúde"; //Saúde é o padrão de categoria
+
+  try {
+    const news = await News.getLatest(limit, category);
+    res.status(200).json(news);
+  } catch (e) {
+    res.status(500).json({ error: 'Erro ao buscar Notícia Actualizadas' });
+  }
+};
+
+exports.getNewsByPage = async (req, res) => {
+  const pageNumber = req.params.pageNumber;
+  const pageSize = req.query.pageSize || 10; // tamanho da página padrão é 10
+  const category = req.query.category || "";
+
+  try {
+    const news = await News.getByPage(pageNumber, pageSize, category);
+    const totalNews = await News.countTotalNews();
+    const totalPages = Math.ceil(totalNews / pageSize);
+    res.status(200).json({
+      news : news,
+    pagination: {
+      currentPage: pageNumber,
+      pageSize: pageSize,
+      totalNews: totalNews,
+      totalPages: totalPages
+    }});
+  } catch (e) {
+    res.status(500).json({ error: 'Erro ao buscar Notícia por Página' });
+  }
+
+};
+
+exports.getNewsById = async (req, res) => {
+
+  try {
+    const news = await News.getById(req.params.id);
+    if (news) {
+      res.status(200).json(news);
+    } else {
+      res.status(404).json({ error: "Notícia não encontrada" });
+    }
+  } catch (e) {
+    res.status(500).json({ error: "Erro ao buscar Notícia" });
+  }
+
 };

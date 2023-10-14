@@ -3,8 +3,7 @@ const News = require("../models/news");
 const Category = require("../models/category");
 
 //All the models
-const news = new News();
-const categories = news.getCategories();
+
 
 /**
  *
@@ -13,6 +12,7 @@ const categories = news.getCategories();
  * @param {*} req - The request object
  * @param {*} res - The response object
  */
-exports.viewCreator = (req, res) => {
-  res.render("contentCreatorView", { categories: categories });
+exports.viewCreator = async (req, res) => {
+  const categories = await Category.getAll()
+  res.render("contentCreatorView", { categories:  categories});
 };
