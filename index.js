@@ -3,7 +3,7 @@ const { render } = require("ejs");
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-//const cors = require("cors");//obter cors
+const cors = require("cors");//obter cors
 
 //Configurações
 const aplicativo = express();
@@ -14,7 +14,7 @@ aplicativo.set("views", path.join(__dirname, "views"));
 aplicativo.set("view engine", "ejs");
 
 //Habilitar cors
-//aplicativo.use(cors())
+aplicativo.use(cors())
 
 //Definindo o tipo de middleware
 aplicativo.use(bodyParser.json({ limit: "10mb" }));

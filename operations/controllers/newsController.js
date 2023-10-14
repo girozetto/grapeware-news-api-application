@@ -124,7 +124,7 @@ exports.getNewsByPage = async (req, res) => {
 
   try {
     const news = await News.getByPage(pageNumber, pageSize, category);
-    const totalNews = await News.countTotalNews();
+    const totalNews = await News.countTotalNews(category);
     const totalPages = Math.ceil(totalNews / pageSize);
     res.status(200).json({
       news : news,
