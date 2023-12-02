@@ -1,4 +1,5 @@
-const { getSqlConnection, closeConnection} = require("./database");
+const { getSqlConnection, closeConnection } = require("./database");
+//const { getSqlConnection, closeConnection } = require("./db_mysql");
 
 class Category {
   constructor(id = "", name = "") {

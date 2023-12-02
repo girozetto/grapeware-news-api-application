@@ -50,6 +50,34 @@ class News {
     }
   }
 
+  static async getByTitle(title) {
+    try {
+      const connection = await getSqlConnection();
+      const result =
+        await connection`SELECT * FROM news WHERE title = ${title}`;
+      return result.length > 0 ? new News().fromObject(result[0]) : null;
+    } catch (err) {
+      console.error(`Erro ao buscar notícia com título ${title}:`, err);
+      return null;
+    } finally {
+      await closeConnection();
+    }
+  }
+
+  static async getLatestNewsDate() {
+    try {
+      const connection = await getSqlConnection();
+      const result =
+        await connection`SELECT MAX(publish_date) AS latest_date FROM news`;
+      return result[0].latest_date ? new Date(result[0].latest_date) : null;
+    } catch (err) {
+      console.error("Erro ao obter a data da notícia mais recente:", err);
+      return null;
+    } finally {
+      await closeConnection();
+    }
+  }
+
   static async getById(id) {
     try {
       const connection = await getSqlConnection();

@@ -1,6 +1,7 @@
 //Dependencies for News Controller
 const News = require("../models/news");
 const Category = require("../models/category");
+const NoticeScrapService = require("../services/noticeScrapService");
 
 //All the models
 const newsModel = new News();
@@ -113,7 +114,7 @@ exports.getLatestNews = async (req, res) => {
     const news = await News.getLatest(limit, category);
     res.status(200).json(news);
   } catch (e) {
-    res.status(500).json({ error: 'Erro ao buscar Notícia Actualizadas' });
+    res.status(500).json({ error: "Erro ao buscar Notícia Actualizadas" });
   }
 };
 
@@ -127,21 +128,20 @@ exports.getNewsByPage = async (req, res) => {
     const totalNews = await News.countTotalNews(category);
     const totalPages = Math.ceil(totalNews / pageSize);
     res.status(200).json({
-      news : news,
-    pagination: {
-      currentPage: pageNumber,
-      pageSize: pageSize,
-      totalNews: totalNews,
-      totalPages: totalPages
-    }});
+      news: news,
+      pagination: {
+        currentPage: pageNumber,
+        pageSize: pageSize,
+        totalNews: totalNews,
+        totalPages: totalPages,
+      },
+    });
   } catch (e) {
-    res.status(500).json({ error: 'Erro ao buscar Notícia por Página' });
+    res.status(500).json({ error: "Erro ao buscar Notícia por Página" });
   }
-
 };
 
 exports.getNewsById = async (req, res) => {
-
   try {
     const news = await News.getById(req.params.id);
     if (news) {
@@ -152,5 +152,34 @@ exports.getNewsById = async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: "Erro ao buscar Notícia" });
   }
+};
 
+exports.updateHealthyNews = async (req, res) => {
+  try {
+    const newHealthyNews = await NoticeScrapService.scrapeHealthyNews();
+
+    if (newHealthyNews.length > 0) {
+      for (const item of newHealthyNews) {
+        const news = new News();
+        news.author = "Ministério da Saúde";
+        news.title = item.titulo;
+        news.content = item.content;
+        news.publishDate = item.dataPublicacao;
+        news.contentPreview = item.conteudoPreview;
+        news.imageCoverUrl = item.imageCoverUrl;
+        news.imageCoverBase64 = "";
+        const category = await Category.getByName("Saúde");
+        news.category = category;
+        await News.create(news);
+      }
+      res.status(200).json(newHealthyNews);
+    } else {
+      res.status(404).json({ error: "Nenhuma nova notícia encontrada" });
+    }
+  } catch (e) {
+    res.status(500).json({
+      error: "Erro ao actualizar as notícias para novas",
+      exception: e,
+    });
+  }
 };
